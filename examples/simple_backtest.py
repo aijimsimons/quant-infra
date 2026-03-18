@@ -58,6 +58,7 @@ def main():
     
     # Run backtest
     result = engine.run(data, strategy)
+    print(f"Trades executed: {result.num_trades}")
     
     # Print results
     print("\n" + "=" * 60)
