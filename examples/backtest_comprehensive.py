@@ -51,7 +51,7 @@ def main():
     
     # Test multiple strategies
     strategies = {
-        "momentum": get_strategy("momentum")(period=20, threshold=0.05),
+        "momentum": get_strategy("momentum")(period=20, threshold=0.002),
         "mean_reversion": get_strategy("mean_reversion")(period=20, z_threshold=2.0),
         "bollinger": get_strategy("bollinger")(period=20, num_std=2.0),
     }
