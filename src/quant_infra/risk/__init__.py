@@ -1,1 +1,1 @@
-"""Risk management."""
+"""Risk management utilities."""
