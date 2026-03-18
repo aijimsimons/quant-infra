@@ -1,0 +1,149 @@
+Metadata-Version: 2.4
+Name: quant-infra
+Version: 0.1.0
+Summary: Quantitative trading infrastructure
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: polars>=1.0.0
+Requires-Dist: numpy>=1.26.0
+Requires-Dist: pandas>=2.1.0
+Requires-Dist: scipy>=1.12.0
+Requires-Dist: matplotlib>=3.8.0
+Requires-Dist: seaborn>=0.13.0
+Requires-Dist: pydantic>=2.0.0
+Requires-Dist: pydantic-settings>=2.0.0
+Provides-Extra: dev
+Requires-Dist: ruff>=0.3.0; extra == "dev"
+Requires-Dist: mypy>=1.10.0; extra == "dev"
+Requires-Dist: pytest>=8.0.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.23.0; extra == "dev"
+Requires-Dist: hypothesis>=6.100.0; extra == "dev"
+Provides-Extra: rust
+Requires-Dist: maturin>=1.6.0; extra == "rust"
+
+# quant-infra
+
+Quantitative trading infrastructure with modern Python stack.
+
+## Overview
+
+A modular, production-ready infrastructure for quantitative crypto trading, featuring:
+
+- **Multi-exchange data loading** (Binance, Bybit, KuCoin)
+- **Advanced technical indicators** (RSI, MACD, Bollinger Bands, etc.)
+- **Event-driven backtesting engine** with detailed metrics
+- **Comprehensive risk management**
+- **Data caching with LRU eviction**
+
+## Stack
+
+- **Data**: `polars` for fast columnar data processing
+- **ML**: `numpy`, `scipy`, `pandas`
+- **Validation**: `pydantic`
+- **Testing**: `pytest` + `hypothesis`
+- **Type checking**: `mypy`
+- **Linting**: `ruff`
+
+## Installation
+
+```bash
+# Clone the repo
+git clone https://github.com/aijimsimons/quant-infra.git
+cd quant-infra
+
+# Install dependencies with uv
+uv sync
+
+# Activate virtual environment
+source .venv/bin/activate
+```
+
+## Project Structure
+
+```
+quant-infra/
+├── src/
+│   └── quant_infra/
+│       ├── backtesting/     # Backtesting engine
+│       │   └── engine.py
+│       ├── data/            # Data ingestion & preprocessing
+│       │   ├── loader.py    # Multi-exchange data loader
+│       │   ├── cache.py     # LRU caching
+│       │   ├── pipeline.py  # Data pipeline
+│       │   └── transform.py # Technical indicators
+│       ├── risk/            # Risk management
+│       │   └── managers.py  # Risk managers
+│       └── utils/           # Common utilities
+│           └── position_sizing.py
+├── tests/
+└── notebooks/
+```
+
+## Quick Start
+
+### Load Data
+
+```python
+from datetime import datetime
+from quant_infra.data import DataLoader, Exchange
+
+loader = DataLoader(exchange=Exchange.BINANCE)
+
+data = loader.load(
+    symbol="BTCUSDT",
+    start=datetime(2024, 1, 1),
+    end=datetime(2024, 12, 31),
+    interval="1h"
+)
+```
+
+### Backtest a Strategy
+
+```python
+from quant_infra.backtesting import BacktestEngine
+from quant_algos.strategies import get_strategy
+
+engine = BacktestEngine(capital=10000)
+strategy = get_strategy("momentum")(period=20, threshold=0.05)
+
+result = engine.run(data, strategy)
+
+print(f"Sharpe: {result.sharpe_ratio:.2f}")
+print(f"Max Drawdown: {result.max_drawdown:.2%}")
+```
+
+### Risk Management
+
+```python
+from quant_infra.risk import DrawdownLimit, ExposureLimit, CompositeRiskManager
+
+risk_manager = CompositeRiskManager([
+    DrawdownLimit(max_drawdown=0.15),
+    ExposureLimit(max_exposure=0.5),
+])
+
+# Use risk_manager.check() before executing orders
+```
+
+## Development
+
+```bash
+# Run linter
+uv run ruff check .
+
+# Run type checker
+uv run mypy .
+
+# Run tests
+uv run pytest
+```
+
+## Documentation
+
+- [API Reference](docs/api.md)
+- [Development Plan](DEVELOPMENT_PLAN.md)
+- [Strategy Examples](../quant-algos/examples/)
+
+## License
+
+MIT
