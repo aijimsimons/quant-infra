@@ -17,3 +17,5 @@ src/quant_infra/risk/__init__.py
 src/quant_infra/risk/managers.py
 src/quant_infra/utils/__init__.py
 src/quant_infra/utils/position_sizing.py
+tests/test_backtesting.py
+tests/test_data_loader.py

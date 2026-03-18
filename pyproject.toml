@@ -13,6 +13,7 @@ dependencies = [
     "seaborn>=0.13.0",
     "pydantic>=2.0.0",
     "pydantic-settings>=2.0.0",
+    "quant-algos",
 ]
 
 [project.optional-dependencies]
@@ -57,6 +58,9 @@ testpaths = ["tests"]
 python_files = "test_*.py"
 python_functions = "test_*"
 addopts = "-v --tb=short"
+
+[tool.uv.sources]
+quant-algos = { path = "../quant-algos" }
 
 [build-system]
 requires = ["setuptools>=68.0"]
